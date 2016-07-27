@@ -22,10 +22,12 @@ namespace hyphus {
         void setClearColor(const Color& color);
 
         void clear();
+        void flush();
 
-        Graphics() = default;
+        Graphics(std::string title, int width = 800, int height = 600);
         Graphics(const Graphics&) = delete;
         Graphics& operator=(const Graphics&&) = delete;
+        virtual ~Graphics();
 
     private:
         SDL_Window *window;

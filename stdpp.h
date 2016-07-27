@@ -28,6 +28,15 @@ namespace stdpp {
     }
 
 
+    /**
+     * C++14 - Using possible implementation from cppreference.com
+     *
+     * Source: http://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique
+     */
+    template<typename T, typename... Args>
+    std::unique_ptr<T> make_unique(Args&&... args) {
+        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
 }
 
 

@@ -21,11 +21,25 @@ namespace hyphus {
 
         Color() = delete;
         Color(const Color&) = default;
-        constexpr Color(float r, float g, float b, float a = 1.0f);
+        constexpr Color(float r, float g, float b, float a = 1.0f)
+            : r{r}
+            , g{g}
+            , b{b}
+            , a{a}
+        { }
 
-        Color& operator=(const Color&&) = default;
+        Color& operator=(Color&&) = default;
     };
 
+    namespace colors
+    {
+        const Color Black       = Color(0.0f, 0.0f, 0.0f, 1.0f);
+        const Color White       = Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        const Color Red         = Color(1.0f, 0.0f, 0.0f, 1.0f);
+        const Color Green       = Color(0.0f, 1.0f, 0.0f, 1.0f);
+        const Color Blue        = Color(0.0f, 0.0f, 1.0f, 1.0f);
+    }
 }
 
 

@@ -1,17 +1,25 @@
-#include <SDL2/SDL.h>
-#include <GL/gl.h>
+//
+//Hyphus
+//
+// Created by zeluisping on 25/07/2016
+//
 
 #include "core/Engine.h"
+
 
 #ifdef __cplusplus
 extern "C"
 #endif
 int main(int argc, char ** argv) {
-    std::shared_ptr<hyphus::Engine> engine = hyphus::Engine::instance();
+    try {
+        std::unique_ptr<hyphus::Engine> engine(new hyphus::Engine());
 
-    engine->init();
-    engine->mainLoop();
-    engine->free();
 
-    return 0;
+        engine->mainLoop();
+    } catch (std::exception e) {
+        // @todo: handle gracefully
+    } catch (...) {
+        // non-standard exceptions
+        // @todo: handle
+    }
 }

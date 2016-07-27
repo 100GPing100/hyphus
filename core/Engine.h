@@ -12,30 +12,21 @@
 // hyphus
 #include "Graphics.h"
 
-// misc.
-#include <SDL2/SDL.h>
 
 namespace hyphus  {
     class Engine {
     public:
-        static std::shared_ptr<Engine> instance();
-
         void mainLoop();
 
-        bool init();
-        bool free();
-
         Engine();
+        virtual ~Engine();
 
     private:
         static int watch(void * userdata, SDL_Event * event);
 
-        GraphicsPtr graphics;
+        std::unique_ptr<Graphics> graphics;
         bool quitting;
     };
-
-
-    typedef std::shared_ptr<Engine> EnginePtr;
 }
 
 
