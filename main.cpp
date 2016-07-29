@@ -5,6 +5,7 @@
 //
 
 #include "core/Engine.h"
+#include <iostream>
 
 
 #ifdef __cplusplus
@@ -14,12 +15,12 @@ int main(int argc, char ** argv) {
     try {
         std::unique_ptr<hyphus::Engine> engine(new hyphus::Engine());
 
-
         engine->mainLoop();
     } catch (std::exception e) {
-        // @todo: handle gracefully
+        printf("error: %s", e.what());
+        getchar();
     } catch (...) {
-        // non-standard exceptions
-        // @todo: handle
+        printf("error: unknown");
+        getchar();
     }
 }
