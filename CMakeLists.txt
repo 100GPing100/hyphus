@@ -14,4 +14,4 @@ link_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/")
 set(SOURCE_FILES main.cpp stdpp.h core/Engine.cpp core/Engine.h core/Graphics.cpp core/Graphics.h core/Color.cpp core/Color.h)
 add_executable(hyphus ${SOURCE_FILES})
 
-target_link_libraries(hyphus SDL2main SDL2 opengl32 glew32)
+target_link_libraries(hyphus SDL2main SDL2 opengl32 glew32 DevIL ILU ILUT)
