@@ -2,12 +2,18 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/core/Entity.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/Component.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/Graphics.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/Engine.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/Component.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/Color.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/core/Graphics.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/Color.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/Graphics.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/Entity.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/core/Engine.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/quidor/Object.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/quidor/Type.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/stdpp.h" isTestSource="false" />

@@ -6,7 +6,24 @@
 
 #include "core/Engine.h"
 #include <iostream>
+#include "core/Component.h"
 
+
+class HealthComponent : public hyphus::Component {
+    ObjectMeta(::HealthComponent, hyphus::Component);
+
+public:
+    int getHealth() const {
+        return health;
+    }
+
+    void takeDamage(int amount) {
+        health = std::max(0, health - amount);
+    }
+
+private:
+    int health;
+};
 
 #ifdef __cplusplus
 extern "C"

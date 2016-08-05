@@ -11,7 +11,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 link_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/")
 
-set(SOURCE_FILES main.cpp stdpp.h core/Engine.cpp core/Engine.h core/Graphics.cpp core/Graphics.h core/Color.cpp core/Color.h)
+set(SOURCE_FILES main.cpp stdpp.h core/Engine.cpp core/Engine.h core/Graphics.cpp core/Graphics.h core/Color.cpp core/Color.h core/Entity.cpp core/Entity.h core/Component.cpp core/Component.h include/quidor/Object.h include/quidor/Type.h)
 add_executable(hyphus ${SOURCE_FILES})
 
 target_link_libraries(hyphus SDL2main SDL2 opengl32 glew32 DevIL ILU ILUT)
