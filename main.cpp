@@ -7,6 +7,7 @@
 #include "core/Engine.h"
 #include <iostream>
 #include "core/Component.h"
+#include "core/Entity.h"
 
 
 class HealthComponent : public hyphus::Component {
@@ -25,12 +26,33 @@ private:
     int health;
 };
 
+#include "quidor/experimental/Object.h"
+
+class ChildObject : public quidor::experimental::Object {
+    //QuidorObjectMeta(::ChildObject);
+};
+
 #ifdef __cplusplus
 extern "C"
 #endif
 int main(int argc, char ** argv) {
+    using namespace quidor::experimental;
+    //std::vector<std::string> args { argv, argv + argc };
+
+    auto t = Object::classType();
+    auto o = Type<Object>();
+
+    auto u = quidor::Object::class_type;
+
+    std::cout << "sizeof(Type<Object>) = " << sizeof(u) << "\n";
+    std::cout << "sizeof(Type<Object>) = " << sizeof(o) << " [experimental]\n";
+
+    if (t == o) {
+        std::cout << "true\n";
+    }
+
     try {
-        std::unique_ptr<hyphus::Engine> engine(new hyphus::Engine());
+        auto engine = std::make_unique<hyphus::Engine>();
 
         engine->mainLoop();
     } catch (std::exception e) {

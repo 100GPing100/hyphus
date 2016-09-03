@@ -10,80 +10,85 @@
 #include <string>
 #include <vector>
 
-namespace quidor {
-    class Type final {
-        using Children = std::vector<const Type*>;
 
+namespace quidor {
+    class Type {
     public:
         const char * getName() const {
-            return name.c_str();
+            return name;
         }
 
         const Type * getParent() const {
             return parent;
         }
 
-        const Children getChildren() const {
-            return children;
-        }
-
-        template<class T>
-        bool isChildOf() const {
+        bool isChildOf(const Type * type) const {
             // parent == type : comparing pointers, each quidor::Object
             // has it's own unique type, owned by ..::classType()
-            return parent == T::classType() || parent->isChildOf<T>();
-        }
-
-        bool isChildOf(const Type * type) const {
-            // parent == type : check isChildOf<T>
             return type != nullptr && (parent == type || parent->isChildOf(type));
         }
 
         template<class T>
-        bool isParentOf() const {
-            for (auto it : children) {
-                // it == type : check isChildOf<T>
-                if (it == T::classType() || it->isParentOf<T>()) {
-                    return true;
-                }
-            }
+        bool isChildOf() const {
+            return isChildOf(T::classType());
+        }
 
-            return false;
+        template<const Type * type>
+        bool isChildOf() const {
+            return isChildOf(type);
         }
 
         bool isParentOf(const Type * type) const {
-            for (auto it : children) {
-                // it == type : check isChildOf<T>
-                if (it == type || it->isParentOf(type)) {
-                    return true;
-                }
-            }
+            /* Avoid costly downward iteration:
+             *
+             *  for (auto it : children) {
+             *      // it == type : check isChildOf<T>
+             *      if (it == T::classType() || it->isParentOf<T>()) {
+             *          return true;
+             *      }
+             *  }
+             *
+             * return false;
+             */
+            return type->isChildOf(this);
+        }
 
-            return false;
+        template<class T>
+        bool isParentOf() const {
+            return isParentOf(T::classType());
+        }
+
+        template<const Type * type>
+        bool isParentOf() const {
+            return isParentOf(type);
+        }
+
+        template<bool strict = false>
+        bool isA(const Type * type) {
+            return this == type || (!strict && isChildOf(type));
+        }
+
+        template<class T, bool strict = false>
+        bool isA() const {
+            return isA<strict>(T::classType());
+        }
+
+        template<const Type * type, bool strict = false>
+        bool isA() const {
+            return isA<strict>(type);
         }
 
         Type() = delete;
         ~Type() = default;
 
-        Type(std::string name, const Type * parent)
+        constexpr Type(const char * name, const Type * parent)
             : name(name)
             , parent(parent)
-        {
-            if (parent == nullptr) {
-                return;
-            }
-            //this->children = Children();
+        { }
 
-            // quidor::Type is always passed around as const
-            // we hack here as an exception so we do not
-            // allow a non-const quidor::Type outside
-            Type * hack = reinterpret_cast<Type *>((void *) parent);
-            hack->children.push_back(this);
-        }
     private:
-        std::string name;
+        const char * name;
         const Type * parent;
-        Children children;
     };
 }
 

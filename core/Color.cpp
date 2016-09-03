@@ -3,7 +3,7 @@
 //
 
 #include "Color.h"
-#include "../stdpp.h"
+#include <stdpp.h>
 
 
 namespace hyphus {

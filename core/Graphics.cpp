@@ -5,7 +5,7 @@
 #include "Graphics.h"
 
 #include <GL/glew.h>
-
+#include "Engine.h"
 
 namespace hyphus {
     void Graphics::setClearColor(const Color& color) {
@@ -37,7 +37,6 @@ namespace hyphus {
 
         context = SDL_GL_CreateContext(window);
         SDL_GL_MakeCurrent(window, context);
-
 
         // load opengl after context creation
         glewExperimental = true; // temporary fix

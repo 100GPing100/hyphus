@@ -6,22 +6,16 @@
 #define QUIDOR_OBJECT_H
 
 
-// std
-#include <memory>
-
 // quidor
 #include "Type.h"
 
 
 #define ObjectMeta(class, parent) \
     public: \
-        static const quidor::Type * classType() { \
-            static quidor::Type type (#class, parent::classType()); \
-            return &type; \
-        } \
+        static constexpr const quidor::Type class_type = quidor::Type(#class, &parent::class_type); \
         \
         virtual const quidor::Type * getClassType() const { \
-            return class::classType(); \
+            return &class::class_type; \
         } \
     private:
 //ObjectMeta(class, parent)
@@ -29,14 +23,10 @@
 namespace quidor {
     class Object {
     public:
-        static const Type * classType() {
-            // owned here, comparable by pointer comparison (const Type * A == const Type * B)
-            static Type type ("quidor::Object", nullptr);
-            return &type;
-        }
+        static constexpr const quidor::Type class_type = quidor::Type("quidor::Object", nullptr);
 
         virtual const Type * getClassType() const {
-            return quidor::Object::classType();
+            return &class_type;
         }
 
         virtual std::string toString() const {
