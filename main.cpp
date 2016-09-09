@@ -8,6 +8,7 @@
 #include <iostream>
 #include "core/Component.h"
 #include "core/Entity.h"
+#include <csignal>
 
 
 class HealthComponent : public hyphus::Component {
@@ -32,10 +33,19 @@ class ChildObject : public quidor::experimental::Object {
     //QuidorObjectMeta(::ChildObject);
 };
 
+namespace {
+    void _segv_handler(int sig) {
+        std::cout << "Segmentation fault.\n";
+        getchar();
+    }
+}
+
 #ifdef __cplusplus
 extern "C"
 #endif
 int main(int argc, char ** argv) {
+    std::signal(SIGSEGV, _segv_handler);
+    /*
     using namespace quidor::experimental;
     //std::vector<std::string> args { argv, argv + argc };
 
@@ -50,11 +60,11 @@ int main(int argc, char ** argv) {
     if (t == o) {
         std::cout << "true\n";
     }
-
+    */
     try {
-        auto engine = std::make_unique<hyphus::Engine>();
+        hyphus::Engine engine {};
 
-        engine->mainLoop();
+        engine.mainLoop();
     } catch (std::exception e) {
         printf("error: %s", e.what());
         getchar();
@@ -62,4 +72,6 @@ int main(int argc, char ** argv) {
         printf("error: unknown");
         getchar();
     }
+
+    return 0;
 }

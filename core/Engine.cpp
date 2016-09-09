@@ -7,27 +7,48 @@
 // std
 #include <cstring>
 
+static hyphus::Graphics * g = nullptr;
+int set_background(lua_State * l) {
+    const std::string color = lua_tostring(l, -1);
+    lua_pop(l, 1);
+
+    if (color == "red") {
+        g->setClearColor(hyphus::colors::Red);
+    } else if (color == "green") {
+        g->setClearColor(hyphus::colors::Green);
+    } else if (color == "blue") {
+        g->setClearColor(hyphus::colors::Blue);
+    } else {
+        g->setClearColor(hyphus::colors::Black);
+    }
+
+    return 0;
+}
+
 
 namespace hyphus  {
     void Engine::mainLoop() {
         SDL_Event event;
-        while (quitting == false) {
+        while (_quitting == false) {
             while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
-                    quitting = true;
+                    _quitting = true;
                 } else if (event.type == SDL_KEYDOWN) {
                     if (event.key.keysym.scancode == SDL_SCANCODE_R) {
-                        graphics->setClearColor(colors::Red);
+                        _lua->call("on_key", "r");
+                        //_graphics->setClearColor(colors::Red);
                     } else if (event.key.keysym.scancode == SDL_SCANCODE_G) {
-                        graphics->setClearColor(colors::Green);
+                        _lua->call("on_key", "g");
+                        //_graphics->setClearColor(colors::Green);
                     } else if (event.key.keysym.scancode == SDL_SCANCODE_B) {
-                        graphics->setClearColor(colors::Blue);
+                        _lua->call("on_key", "b");
+                        //_graphics->setClearColor(colors::Blue);
                     }
                 }
             }
 
-            graphics->clear();
-            graphics->flush();
+            _graphics->clear();
+            _graphics->flush();
         }
     }
 
@@ -40,23 +61,30 @@ namespace hyphus  {
             throw std::runtime_error(err.c_str());
         }
 
-        graphics.reset(new Graphics("hyphus_window"));
+        _window.reset(new OpenGLWindow("hyphus_window", 800, 600));
+        _graphics.reset(new Graphics(_window->context()));
+        _lua.reset(new LuaState());
 
-        SDL_AddEventWatch(Engine::watch , this);
+        g = _graphics.get();
+        _lua->load("test.lua");
+        _lua->reg(set_background, "set_background");
+
+        SDL_AddEventWatch(Engine::_watch, this);
     }
 
     Engine::~Engine() {
-        graphics.reset(); // explicit delete
+        _graphics.reset(); // explicit delete
+        _window.reset(); // explicit delete
 
-        SDL_DelEventWatch(Engine::watch, nullptr);
+        SDL_DelEventWatch(Engine::_watch, nullptr);
         SDL_Quit();
     }
 
-    int Engine::watch(void * userdata, SDL_Event *event) {
+    int Engine::_watch(void * userdata, SDL_Event * event) {
         Engine * engine = static_cast<Engine *>(userdata); // non-owning
 
         if (event->type == SDL_APP_WILLENTERBACKGROUND) {
-            engine->quitting = true;
+            engine->_quitting = true;
         }
 
         return 1;

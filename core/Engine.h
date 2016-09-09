@@ -10,7 +10,9 @@
 #include <memory>
 
 // hyphus
+#include "OpenGLWindow.h"
 #include "Graphics.h"
+#include "LuaState.h"
 
 
 namespace hyphus  {
@@ -22,10 +24,12 @@ namespace hyphus  {
         virtual ~Engine();
 
     private:
-        static int watch(void * userdata, SDL_Event * event);
+        static int _watch(void * userdata, SDL_Event * event);
 
-        std::unique_ptr<Graphics> graphics;
-        bool quitting;
+        std::unique_ptr<OpenGLWindow> _window;
+        std::unique_ptr<Graphics> _graphics;
+        std::unique_ptr<LuaState> _lua;
+        bool _quitting;
     };
 }
 

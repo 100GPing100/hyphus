@@ -11,6 +11,7 @@
 
 // hyphus
 #include "Color.h"
+#include "OpenGLWindow.h"
 
 // misc.
 #include <SDL2/SDL.h>
@@ -24,14 +25,15 @@ namespace hyphus {
         void clear();
         void flush();
 
-        Graphics(std::string title, int width = 800, int height = 600);
-        Graphics(const Graphics&) = delete;
-        Graphics& operator=(const Graphics&&) = delete;
+        Graphics() = delete; // no default
+        Graphics(const Graphics &) = delete; // no copy
+        Graphics & operator=(const Graphics &&) = delete; // no move
+
+        Graphics(std::weak_ptr<OpenGLContext> weak_context);
         virtual ~Graphics();
 
     private:
-        SDL_Window *window;
-        SDL_GLContext context;
+        std::weak_ptr<OpenGLContext> _weak_context;
     };
 }
 

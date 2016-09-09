@@ -17,37 +17,16 @@ namespace hyphus {
     }
 
     void Graphics::flush() {
-        SDL_GL_SwapWindow(window);
-        glCreateProgram();
-    }
-
-    Graphics::Graphics(std::string title, int width, int height) {
-        window = SDL_CreateWindow(
-                title.c_str(),          // title
-                SDL_WINDOWPOS_CENTERED, // pos_x
-                SDL_WINDOWPOS_CENTERED, // pos_x
-                width,                  // width
-                height,                 // height
-                SDL_WINDOW_OPENGL       // flags
-        );
-
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-        context = SDL_GL_CreateContext(window);
-        SDL_GL_MakeCurrent(window, context);
-
-        // load opengl after context creation
-        glewExperimental = true; // temporary fix
-        GLenum err = glewInit();
-        if (err != GLEW_OK) {
-            throw std::runtime_error("Failed to initialise glew.");
+        if (auto context = _weak_context.lock()) {
+            context->swap_window();
         }
     }
 
+    Graphics::Graphics(std::weak_ptr<OpenGLContext> weak_context)
+            : _weak_context(weak_context) {
+        weak_context.lock()->make_current();
+    }
+
     Graphics::~Graphics() {
-        SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(window);
     }
 }
