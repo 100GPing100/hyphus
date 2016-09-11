@@ -11,7 +11,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 link_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/")
 
-set(SOURCE_FILES main.cpp stdpp.h core/Engine.cpp core/Engine.h core/Graphics.cpp core/Graphics.h core/Color.cpp core/Color.h core/Entity.cpp core/Entity.h core/Component.cpp core/Component.h core/ResourceFactory.cpp core/ResourceFactory.h core/LuaState.cpp core/LuaState.h core/Window.cpp core/Window.h core/OpenGLWindow.cpp core/OpenGLWindow.h core/OpenGLContext.h)
+set(SOURCE_FILES main.cpp utils.h core/Engine.cpp core/Engine.h core/Graphics.cpp core/Graphics.h core/Color.h core/Entity.h core/Component.h core/ResourceFactory.cpp core/ResourceFactory.h core/LuaState.cpp core/LuaState.h core/Window.cpp core/Window.h core/OpenGLWindow.cpp core/OpenGLWindow.h core/OpenGLContext.h)
 file(GLOB LUA_SRC "lua/*.h" "lua/*.hpp" "lua/*.c")
 
 add_executable(hyphus ${SOURCE_FILES} ${LUA_SRC})

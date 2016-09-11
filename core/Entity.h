@@ -7,58 +7,97 @@
 
 
 // std
+#include <type_traits>
+#include <exception>
+#include <functional>
 #include <vector>
-#include <algorithm>
-
-
-// std
 #include <memory>
 
 // hyphus
-#include <core/Component.h>
+#include "Component.h"
 
-// quidor
-#include <quidor/Object.h>
+// ...
+#include "utils.h"
+
 
 namespace hyphus {
-    class Entity final : public quidor::Object {
-        ObjectMeta(hyphus::Entity, quidor::Object);
-
-        using ComponentUPtr = std::unique_ptr<Component>;
-        using ComponentVector = std::vector<ComponentUPtr>;
+    class Entity final {
+        struct empty_t { };
 
     public:
-        template<class T, typename ... TArgs>
-        void addComponent(TArgs && ... args) {
-            components.push_back(std::make_unique<T>(args...));
+        template<class T, typename ... Args>
+        T * add(Args ... args) noexcept(std::is_nothrow_constructible<T, Args ...>()) {
+            static_assert(utils::is_strict_base_of<Component, T>(), "'T' must be a child of, and not same as, 'hyphus::Component'");
+            static_assert(std::is_constructible<T, Args ...>(), "Cannot construct object with given arguments");
+
+            T * component = new T(std::forward<Args>(args) ...);
+
+            component->_owner = this;
+
+            _components.push_back(static_cast<Component *>(component));
+
+            return component;
         }
 
-        template<class T = Component, bool strict = false>
-        std::vector<T *> getComponents() const {
-            std::vector<T *> result; // non-owning
+        template<class T>
+        T * first_of() const noexcept {
+            static_assert(utils::is_strict_base_of<Component, T>(), "'T' must be a child of, and not same as, 'hyphus::Component'");
 
-            std::for_each(components.begin(), components.end(), [&] (ComponentUPtr c) {
-                if (c->getClassType()->isA<T, strict>() == true) {
-                    result.push_back(reinterpret_cast<T *>(c.get()));
+            for (Component * c : _components) {
+                T * dc = dynamic_cast<T *>(c);
+
+                if (dc != nullptr) {
+                    return dc;
                 }
-            });
+            }
 
-            return result;
+            return nullptr;
         }
 
-        template<class T, bool strict = false>
-        bool hasComponent() const {
-            return std::find_if(components.begin(), components.end(), [] (const ComponentUPtr & c) -> bool {
-                return c->getClassType()->isA<T, strict>();
-            }) != components.end();
+        template<class T>
+        std::vector<T *> all_of() const noexcept {
+            static_assert(utils::is_strict_base_of<Component, T>(), "'T' must be a child of, and not same as, 'hyphus::Component'");
+
+            std::vector<T *> all { };
+            for (Component * c : _components) {
+                T * dc = dynamic_cast<T *>(c);
+
+                if (dc != nullptr) {
+                    all.push_back(dc);
+                }
+            }
+
+            return std::move(all);
         }
 
-        Entity() = default;
-        Entity(const Entity &) = delete;
-        ~Entity() = default;
+        const std::vector<Component *> & all() const noexcept {
+            return _components;
+        }
+
+        bool operator ==(const Entity & e) {
+            return _id == e._id;
+        }
+
+        Entity() noexcept
+            : _components{}
+            , _id(new empty_t()) { }
+
+        ~Entity() noexcept {
+            delete _id;
+
+            for (Component * c : _components) {
+                delete c;
+            }
+        }
+
+        Entity(Entity && o) = delete; // no move
+        Entity(const Entity &) = delete; // no copy
+        Entity & operator=(const Entity &) = delete; // no copy assign
+        Entity & operator=(const Entity &&) = delete; // no move assign
 
     private:
-        ComponentVector components;
+        std::vector<Component *> _components;
+        empty_t * _id;
     };
 }
 

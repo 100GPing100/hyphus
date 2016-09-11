@@ -11,7 +11,7 @@
 
 // hyphus
 #include "Color.h"
-#include "OpenGLWindow.h"
+#include "OpenGLContext.h"
 
 // misc.
 #include <SDL2/SDL.h>
@@ -29,11 +29,11 @@ namespace hyphus {
         Graphics(const Graphics &) = delete; // no copy
         Graphics & operator=(const Graphics &&) = delete; // no move
 
-        Graphics(std::weak_ptr<OpenGLContext> weak_context);
+        Graphics(const OpenGLContext * context);
         virtual ~Graphics();
 
     private:
-        std::weak_ptr<OpenGLContext> _weak_context;
+        const OpenGLContext * _context;
     };
 }
 

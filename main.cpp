@@ -4,65 +4,20 @@
 // Created by zeluisping on 25/07/2016
 //
 
-#include "core/Engine.h"
+
+// std
 #include <iostream>
-#include "core/Component.h"
-#include "core/Entity.h"
-#include <csignal>
+
+// hyphus
+#include "core/Engine.h"
 
 
-class HealthComponent : public hyphus::Component {
-    ObjectMeta(::HealthComponent, hyphus::Component);
 
-public:
-    int getHealth() const {
-        return health;
-    }
+extern "C" int main(int argc, char ** argv) {
+    std::cout << std::boolalpha;
 
-    void takeDamage(int amount) {
-        health = std::max(0, health - amount);
-    }
-
-private:
-    int health;
-};
-
-#include "quidor/experimental/Object.h"
-
-class ChildObject : public quidor::experimental::Object {
-    //QuidorObjectMeta(::ChildObject);
-};
-
-namespace {
-    void _segv_handler(int sig) {
-        std::cout << "Segmentation fault.\n";
-        getchar();
-    }
-}
-
-#ifdef __cplusplus
-extern "C"
-#endif
-int main(int argc, char ** argv) {
-    std::signal(SIGSEGV, _segv_handler);
-    /*
-    using namespace quidor::experimental;
-    //std::vector<std::string> args { argv, argv + argc };
-
-    auto t = Object::classType();
-    auto o = Type<Object>();
-
-    auto u = quidor::Object::class_type;
-
-    std::cout << "sizeof(Type<Object>) = " << sizeof(u) << "\n";
-    std::cout << "sizeof(Type<Object>) = " << sizeof(o) << " [experimental]\n";
-
-    if (t == o) {
-        std::cout << "true\n";
-    }
-    */
     try {
-        hyphus::Engine engine {};
+        hyphus::Engine engine { };
 
         engine.mainLoop();
     } catch (std::exception e) {

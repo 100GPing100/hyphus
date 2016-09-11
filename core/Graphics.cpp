@@ -17,14 +17,12 @@ namespace hyphus {
     }
 
     void Graphics::flush() {
-        if (auto context = _weak_context.lock()) {
-            context->swap_window();
-        }
+        _context->swap_window();
     }
 
-    Graphics::Graphics(std::weak_ptr<OpenGLContext> weak_context)
-            : _weak_context(weak_context) {
-        weak_context.lock()->make_current();
+    Graphics::Graphics(const OpenGLContext * context)
+            : _context(context) {
+        context->make_current();
     }
 
     Graphics::~Graphics() {

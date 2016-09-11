@@ -27,8 +27,8 @@ namespace hyphus  {
         static int _watch(void * userdata, SDL_Event * event);
 
         std::unique_ptr<OpenGLWindow> _window;
-        std::unique_ptr<Graphics> _graphics;
         std::unique_ptr<LuaState> _lua;
+        Graphics * _graphics;
         bool _quitting;
     };
 }

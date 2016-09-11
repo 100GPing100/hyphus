@@ -6,14 +6,16 @@
 
 
 namespace hyphus {
-    std::weak_ptr<OpenGLContext> OpenGLWindow::context() const {
-        return _context;
+    Graphics * OpenGLWindow::graphics() const {
+        return _graphics.get();
     }
 
     OpenGLWindow::OpenGLWindow(const std::string & title, const int x, const int y, const int width, const int height,
                                WindowFlags flags)
-            : Window(title, x, y, width, height, flags | WindowFlags::OpenGL)
-            , _context(std::make_shared<OpenGLContext>(handle(), 3, 1)) { }
+            : Window(title, x, y, width, height, flags | WindowFlags::OpenGL) {
+        _context = std::make_unique<OpenGLContext>(handle(), 3, 1);
+        _graphics = std::make_unique<Graphics>(_context.get());
+    }
 
 
     OpenGLWindow::OpenGLWindow(const std::string & title, const int width, const int height, WindowFlags flags)

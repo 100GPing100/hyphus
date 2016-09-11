@@ -6,12 +6,21 @@
 #define HYPHUS_COMPONENT_H
 
 
-// quidor
-#include <quidor/Object.h>
-
 namespace hyphus {
-    class Component : public quidor::Object {
-        ObjectMeta(hyphus::Component, quidor::Object);
+    class Entity;
+
+    class Component {
+        friend hyphus::Entity;
+
+    public:
+        virtual void update(double deltatime) { }
+
+        Entity * owner() const {
+            return _owner;
+        }
+
+    private:
+        Entity * _owner;
     };
 }
 

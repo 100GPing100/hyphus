@@ -56,7 +56,7 @@ namespace hyphus {
         Window(const std::string & title, const int x, const int y, const int width, const int height, const WindowFlags flags);
         Window(const std::string & title, const int width, const int height, const WindowFlags flags);
 
-        virtual ~Window();
+        virtual ~Window() noexcept;
 
     private:
         SDL_Window * _handle;

@@ -62,10 +62,9 @@ namespace hyphus  {
         }
 
         _window.reset(new OpenGLWindow("hyphus_window", 800, 600));
-        _graphics.reset(new Graphics(_window->context()));
+        _graphics = _window->graphics();
         _lua.reset(new LuaState());
 
-        g = _graphics.get();
         _lua->load("test.lua");
         _lua->reg(set_background, "set_background");
 
@@ -73,7 +72,6 @@ namespace hyphus  {
     }
 
     Engine::~Engine() {
-        _graphics.reset(); // explicit delete
         _window.reset(); // explicit delete
 
         SDL_DelEventWatch(Engine::_watch, nullptr);

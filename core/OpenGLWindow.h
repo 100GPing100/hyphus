@@ -12,12 +12,14 @@
 // ...
 #include "Window.h"
 #include "OpenGLContext.h"
+#include "Graphics.h"
 
 
 namespace hyphus {
     class OpenGLWindow : public Window {
     public:
-        std::weak_ptr<OpenGLContext> context() const;
+        Graphics * graphics() const;
+
 
         OpenGLWindow() = delete; // default
         OpenGLWindow(const OpenGLWindow &) = delete; // no copy
@@ -25,10 +27,11 @@ namespace hyphus {
 
         OpenGLWindow(const std::string & title, const int x, const int y, const int width, const int height, const WindowFlags flags = WindowFlags::None);
         OpenGLWindow(const std::string & title, const int width, const int height, const WindowFlags flags = WindowFlags::None);
-        virtual ~OpenGLWindow() { }
+        virtual ~OpenGLWindow() noexcept { }
 
     private:
-        std::shared_ptr<OpenGLContext> _context;
+        std::unique_ptr<Graphics> _graphics;
+        std::unique_ptr<OpenGLContext> _context;
     };
 }
 
